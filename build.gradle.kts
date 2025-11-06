@@ -16,6 +16,9 @@ dependencies {
     // SLF4J
     implementation("org.slf4j:slf4j-api:2.0.13")
 
+    // Jackson
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2")
+
     testImplementation(kotlin("test"))
 }
 
