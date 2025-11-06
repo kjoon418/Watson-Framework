@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.apache.tomcat.embed:tomcat-embed-core:10.1.30")
+    implementation("org.apache.tomcat.embed:tomcat-embed-core:11.0.12")
     implementation("org.apache.tomcat.embed:tomcat-embed-logging-juli:10.1.30")
 
     testImplementation(kotlin("test"))
