@@ -3,10 +3,10 @@ package framework.router
 data class PathTemplate(
     val originalPath: String
 ) {
-    val pattern: String = originalPath.replace(VARIABLE_PATTERN, REPLACEMENT)
+    private val pathPattern: String = originalPath.replace(VARIABLE_PATTERN, REPLACEMENT)
 
     fun matches(actualPath: String): Boolean {
-        val regex = Regex("^" + pattern.replace("{}", "[^/]+") + "$")
+        val regex = Regex("^" + pathPattern.replace("{}", "[^/]+") + "$")
         return regex.matches(actualPath)
     }
 
@@ -16,11 +16,11 @@ data class PathTemplate(
 
         other as PathTemplate
 
-        return pattern == other.pattern
+        return pathPattern == other.pathPattern
     }
 
     override fun hashCode(): Int {
-        return pattern.hashCode()
+        return pathPattern.hashCode()
     }
 
     companion object {
