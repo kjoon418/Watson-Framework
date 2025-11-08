@@ -1,7 +1,7 @@
 package framework.server
 
 import framework.config.SERVER_BASE_DIR_PATH
-import framework.config.SERVER_NAME
+import framework.config.SERVLET_NAME
 import org.apache.catalina.startup.Tomcat
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -11,7 +11,7 @@ class HttpServer (
 
     private val port: Int = 8080,
     private val baseDirPath: String = SERVER_BASE_DIR_PATH,
-    private val servletName: String = SERVER_NAME
+    private val servletName: String = SERVLET_NAME
 ) : Server {
     private val tomcat = Tomcat()
 
