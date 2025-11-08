@@ -19,6 +19,9 @@ dependencies {
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2")
 
+    // Reflections
+    implementation("org.reflections:reflections:0.10.2")
+
     testImplementation(kotlin("test"))
 }
 
