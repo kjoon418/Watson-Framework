@@ -13,7 +13,7 @@ class ExceptionResponseHandler {
         return Response(
             status = exception.statusCode,
             contentType = "text/plain",
-            body = exception.stackTraceToString()
+            body = exception.message ?: ""
         )
     }
 
