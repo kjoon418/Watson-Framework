@@ -7,7 +7,7 @@ import framework.request.JsonRequestBodyMapper
 import framework.response.JsonResponseMapper
 import framework.exception.ExceptionResponseHandler
 import framework.repository.MemoryRepository
-import framework.repository.RepositoryFactory
+import framework.repository.RepositoryBuilders
 import framework.repository.RepositoryProvider
 import framework.repository.RepositoryScanner
 import framework.response.HttpResponseWriter
@@ -35,11 +35,8 @@ class FrameworkConfig {
     private val exceptionResponseHandler = ExceptionResponseHandler()
 
     // Repository
-    private val repositoryFactory = RepositoryFactory()
-    private val repositoryScanner = RepositoryScanner(
-        factory = repositoryFactory,
-        defaultImplementation = MemoryRepository::class
-    )
+    private val repositoryScanner = RepositoryScanner(MemoryRepository::class)
+    private val repositoryProvider = RepositoryProvider
 
     // Service
     private val serviceScanner = ServiceScanner()
@@ -54,8 +51,8 @@ class FrameworkConfig {
     val server: Server
 
     init {
-        repositoryScanner.scanAndRegister(BASE_PACKAGES)
-        RepositoryProvider.init(repositoryFactory)
+        val repositoryBuilders = repositoryScanner.scan(BASE_PACKAGES)
+        repositoryProvider.init(repositoryBuilders)
 
         val services = serviceScanner.scan(BASE_PACKAGES)
         serviceProvider.init(services)

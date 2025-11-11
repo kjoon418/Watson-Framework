@@ -6,15 +6,17 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 class RepositoryScanner(
-    private val factory: RepositoryFactory,
-    private val defaultImplementation: KClass<out Repository<*, *>>
+    private val implementationStrategy: KClass<out Repository<*, *>>
 ) {
-    fun scanAndRegister(basePackages: List<String>) {
+    fun scan(basePackages: List<String>): RepositoryBuilders {
         val repositories = findRepositories(basePackages)
 
+        val repositoryBuilders = RepositoryBuilders()
         for (repository in repositories) {
-            registerRepository(repository)
+            registerRepositoryBuilder(repositoryBuilders, repository)
         }
+
+        return repositoryBuilders
     }
 
     private fun findRepositories(basePackages: List<String>): Set<Class<*>> {
@@ -24,14 +26,19 @@ class RepositoryScanner(
         return allSubTypes.filter { it.isInterface }.toSet()
     }
 
-    private fun registerRepository(repoInterface: Class<*>) {
-        val (entityClass, keyClass) = findEntityAndKeyTypes(repoInterface)
+    private fun registerRepositoryBuilder(
+        repositoryBuilders: RepositoryBuilders,
+        repositoryClass: Class<*>
+    ) {
+        val (entityClass, keyClass) = findEntityAndKeyTypes(repositoryClass)
             ?: return
 
         @Suppress("UNCHECKED_CAST")
-        factory.register(entityClass as Class<Nothing>, keyClass) {
-            defaultImplementation.java.getDeclaredConstructor().newInstance() as Repository<*, *>
-        }
+        repositoryBuilders.register(
+            entityClass = entityClass as Class<Nothing>,
+            keyClass = keyClass,
+            builder = builder
+        )
     }
 
     private fun findEntityAndKeyTypes(repoInterface: Class<*>): Pair<Class<*>, Class<*>>? {
@@ -66,6 +73,11 @@ class RepositoryScanner(
 
     private val ParameterizedType.keyType: Type
         get() = actualTypeArguments[INDEX_OF_KEY_TYPE]
+
+    private val builder: () -> Repository<*, *>
+        get() = {
+            implementationStrategy.java.getDeclaredConstructor().newInstance() as Repository<*, *>
+        }
 
     companion object {
         const val INDEX_OF_ENTITY_TYPE = 0

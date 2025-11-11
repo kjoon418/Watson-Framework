@@ -1,16 +1,24 @@
 package framework.repository
 
-object RepositoryProvider {
-    private lateinit var repositoryFactory: RepositoryFactory
+import java.util.concurrent.ConcurrentHashMap
 
-    fun init(repositoryFactory: RepositoryFactory) {
-        this.repositoryFactory = repositoryFactory
+object RepositoryProvider {
+    private lateinit var repositoryBuilders: RepositoryBuilders
+    private val repositories = ConcurrentHashMap<Pair<Class<*>, Class<*>>, Repository<*, *>>()
+
+    fun init(repositoryBuilders: RepositoryBuilders) {
+        this.repositoryBuilders = repositoryBuilders
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun <T : Entity<K>, K> get(
         entityClass: Class<T>,
         keyClass: Class<K>
     ): Repository<T, K> {
-        return repositoryFactory.get(entityClass, keyClass)
+        val key = Pair(entityClass, keyClass)
+
+        return repositories.computeIfAbsent(key) {
+            repositoryBuilders.build(entityClass, keyClass)
+        } as Repository<T, K>
     }
 }
