@@ -17,6 +17,8 @@ import framework.router.Router
 import framework.server.HttpServer
 import framework.server.Server
 import framework.server.Servlet
+import framework.service.ServiceProvider
+import framework.service.ServiceScanner
 
 class FrameworkConfig {
     // Mapper
@@ -39,6 +41,10 @@ class FrameworkConfig {
         defaultImplementation = MemoryRepository::class
     )
 
+    // Service
+    private val serviceScanner = ServiceScanner()
+    private val serviceProvider = ServiceProvider
+
     // Dispatcher
     private val dispatcher: Dispatcher
 
@@ -50,6 +56,9 @@ class FrameworkConfig {
     init {
         repositoryScanner.scanAndRegister(BASE_PACKAGES)
         RepositoryProvider.init(repositoryFactory)
+
+        val services = serviceScanner.scan(BASE_PACKAGES)
+        serviceProvider.init(services)
 
         val actions = actionScanner.scan(BASE_PACKAGES)
         router = DefaultRouter(actions)
