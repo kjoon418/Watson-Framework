@@ -1,5 +1,5 @@
-package framework.service
+package framework.component
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Service
+annotation class Component

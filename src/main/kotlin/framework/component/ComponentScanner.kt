@@ -1,27 +1,27 @@
-package framework.service
+package framework.component
 
 import org.reflections.Reflections
 import java.lang.reflect.Modifier.isAbstract
 
-class ServiceScanner {
-    fun scan(basePackages: List<String>): ServiceInstances {
-        val serviceClasses = findServiceClasses(basePackages)
+class ComponentScanner {
+    fun scan(basePackages: List<String>): ComponentInstances {
+        val componentClasses = findServiceClasses(basePackages)
 
-        val instances = ServiceInstances()
-        for (serviceClass in serviceClasses) {
-            if (serviceClass.isNotImplementation) {
+        val instances = ComponentInstances()
+        for (componentClass in componentClasses) {
+            if (componentClass.isNotImplementation) {
                 continue
             }
 
-            val instance = serviceClass.createInstance()
+            val instance = componentClass.createInstance()
 
             instances.register(
-                classKey = serviceClass,
+                classKey = componentClass,
                 instanceValue = instance
             )
             instances.registerSuperInterfaces(
-                serviceClass = serviceClass,
-                serviceInstance = instance
+                componentClass = componentClass,
+                componentInstance = instance
             )
         }
 
@@ -31,7 +31,7 @@ class ServiceScanner {
     private fun findServiceClasses(basePackages: List<String>): Set<Class<*>> {
         val reflections = Reflections(basePackages)
 
-        return reflections.getTypesAnnotatedWith(Service::class.java)
+        return reflections.getTypesAnnotatedWith(Component::class.java)
     }
 
     private val Class<*>.isNotImplementation: Boolean

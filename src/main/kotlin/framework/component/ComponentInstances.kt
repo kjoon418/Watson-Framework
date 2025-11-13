@@ -1,6 +1,6 @@
-package framework.service
+package framework.component
 
-class ServiceInstances {
+class ComponentInstances {
     private val instances = mutableMapOf<Class<*>, Any>()
 
     fun get(): Map<Class<*>, Any> {
@@ -16,13 +16,13 @@ class ServiceInstances {
     }
 
     fun registerSuperInterfaces(
-        serviceClass: Class<*>,
-        serviceInstance: Any
+        componentClass: Class<*>,
+        componentInstance: Any
     ) {
-        for (superInterface in serviceClass.allInterfaces) {
+        for (superInterface in componentClass.allInterfaces) {
             register(
                 classKey = superInterface,
-                instanceValue = serviceInstance
+                instanceValue = componentInstance
             )
         }
     }

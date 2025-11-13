@@ -17,8 +17,8 @@ import framework.security.AuthorizationValidator
 import framework.server.HttpServer
 import framework.server.Server
 import framework.server.Servlet
-import framework.service.ServiceProvider
-import framework.service.ServiceScanner
+import framework.component.ComponentProvider
+import framework.component.ComponentScanner
 
 class FrameworkConfig {
     // Mapper
@@ -38,9 +38,9 @@ class FrameworkConfig {
     private val repositoryScanner = RepositoryScanner(MemoryRepository::class)
     private val repositoryProvider = RepositoryProvider
 
-    // Service
-    private val serviceScanner = ServiceScanner()
-    private val serviceProvider = ServiceProvider
+    // Component
+    private val componentScanner = ComponentScanner()
+    private val componentProvider = ComponentProvider
 
     // Security
     private val authorizationValidator = AuthorizationValidator()
@@ -57,8 +57,8 @@ class FrameworkConfig {
         val repositoryBuilders = repositoryScanner.scan(BASE_PACKAGES)
         repositoryProvider.init(repositoryBuilders)
 
-        val services = serviceScanner.scan(BASE_PACKAGES)
-        serviceProvider.init(services)
+        val components = componentScanner.scan(BASE_PACKAGES)
+        componentProvider.init(components)
 
         val actions = actionScanner.scan(BASE_PACKAGES)
         router = DefaultRouter(actions)
