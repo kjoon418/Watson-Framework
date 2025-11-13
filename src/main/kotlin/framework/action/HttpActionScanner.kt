@@ -1,5 +1,6 @@
 package framework.action
 
+import framework.constants.HttpMethod
 import framework.router.PathTemplate
 import framework.router.RouteKey
 import org.reflections.Reflections
@@ -34,13 +35,12 @@ class HttpActionScanner : ActionScanner {
     }
 
     private fun buildActionRegistry(actionTypes: List<Class<*>>): Map<RouteKey, Action<*, *>> {
-        return actionTypes.associate { clazz ->
-            val annotation = clazz.httpActionAnnotation
-            val actionInstance = instantiateAction(clazz)
-            val key = annotation.toRouteKey()
+        return actionTypes.flatMap { actionClass ->
+            val annotation = actionClass.httpActionAnnotation
+            val actionInstance = instantiateAction(actionClass)
 
-            key to actionInstance
-        }
+            annotation.toRouteKeys().map { Pair(it, actionInstance) }
+        }.toMap()
     }
 
     private val Class<*>.httpActionAnnotation: HttpAction
@@ -55,10 +55,15 @@ class HttpActionScanner : ActionScanner {
             .newInstance() as Action<*, *>
     }
 
-    private fun HttpAction.toRouteKey(): RouteKey {
-        return RouteKey(
-            method = method,
-            pathTemplate = PathTemplate(path)
-        )
+    private fun HttpAction.toRouteKeys(): List<RouteKey> {
+        return methodsToRegister.map { RouteKey(it, PathTemplate(path)) }
+    }
+
+    private val HttpAction.methodsToRegister: Array<HttpMethod> get() {
+        if (method.isEmpty()) {
+            return HttpMethod.entries.toTypedArray()
+        }
+
+        return method
     }
 }
