@@ -1,6 +1,6 @@
 package framework.security
 
-@Target(AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class RequireAuthorize(
     val role: Role

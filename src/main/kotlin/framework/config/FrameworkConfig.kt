@@ -2,18 +2,18 @@ package framework.config
 
 import framework.action.HttpActionScanner
 import framework.dispatcher.Dispatcher
-import framework.request.HttpRequestMapper
-import framework.request.JsonRequestBodyMapper
-import framework.response.JsonResponseMapper
 import framework.exception.ExceptionResponseHandler
 import framework.repository.MemoryRepository
-import framework.repository.RepositoryBuilders
 import framework.repository.RepositoryProvider
 import framework.repository.RepositoryScanner
+import framework.request.HttpRequestMapper
+import framework.request.JsonRequestBodyMapper
 import framework.response.HttpResponseWriter
+import framework.response.JsonResponseMapper
 import framework.router.DefaultRouter
 import framework.router.PathVariableExtractor
 import framework.router.Router
+import framework.security.AuthorizationValidator
 import framework.server.HttpServer
 import framework.server.Server
 import framework.server.Servlet
@@ -42,6 +42,9 @@ class FrameworkConfig {
     private val serviceScanner = ServiceScanner()
     private val serviceProvider = ServiceProvider
 
+    // Security
+    private val authorizationValidator = AuthorizationValidator()
+
     // Dispatcher
     private val dispatcher: Dispatcher
 
@@ -64,6 +67,7 @@ class FrameworkConfig {
             responseMapper = responseMapper,
             bodyMapper = bodyMapper,
             router = router,
+            authorizationValidator = authorizationValidator,
             pathVariableExtractor = pathVariableExtractor,
             exceptionResponseHandler = exceptionResponseHandler
         )
