@@ -27,6 +27,9 @@ dependencies {
     // JWT
     implementation("com.auth0:java-jwt:4.4.0")
 
+    //
+    implementation("org.mindrot:jbcrypt:0.4")
+
     testImplementation(kotlin("test"))
 }
 
