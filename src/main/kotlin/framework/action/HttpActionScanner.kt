@@ -8,7 +8,7 @@ import org.reflections.scanners.Scanners
 import org.reflections.util.ClasspathHelper
 import org.reflections.util.ConfigurationBuilder
 
-class HttpActionScanner : ActionScanner {
+object HttpActionScanner : ActionScanner {
     override fun scan(basePackages: List<String>): Map<RouteKey, Action<*, *>> {
         val reflections = buildReflections(basePackages)
         val types = reflections.findTypesOfHttpAction()

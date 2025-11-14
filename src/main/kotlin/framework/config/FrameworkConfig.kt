@@ -29,7 +29,7 @@ object FrameworkConfig {
 
     // Router
     private val pathVariableExtractor = PathVariableExtractor()
-    private val actionScanner = HttpActionScanner()
+    private val actionScanner = HttpActionScanner
     private val router: Router
 
     // Exception
