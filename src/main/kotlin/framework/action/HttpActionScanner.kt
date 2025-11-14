@@ -46,7 +46,7 @@ object HttpActionScanner : ActionScanner {
     private val Class<*>.httpActionAnnotation: HttpAction
         get() {
             return getAnnotation(HttpAction::class.java)
-                ?: error("HttpAction 애노태이션이 누락되었습니다: $this")
+                ?: error("$ANNOTATION_MISSING : $this")
         }
 
     private fun instantiateAction(clazz: Class<*>): Action<*, *> {
@@ -66,4 +66,6 @@ object HttpActionScanner : ActionScanner {
 
         return method
     }
+
+    private const val ANNOTATION_MISSING = "HttpAction 애노태이션이 누락되었습니다"
 }
