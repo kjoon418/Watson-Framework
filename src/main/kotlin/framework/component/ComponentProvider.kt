@@ -3,8 +3,6 @@ package framework.component
 import java.util.concurrent.ConcurrentHashMap
 
 object ComponentProvider {
-    private const val SERVICE_NOT_FOUND = "해당 타입에 대한 컴포넌트를 찾을 수 없습니다"
-
     private val components = ConcurrentHashMap<Class<*>, Any>()
 
     fun init(componentInstances: ComponentInstances) {
@@ -18,4 +16,6 @@ object ComponentProvider {
         @Suppress("UNCHECKED_CAST")
         return instance as T
     }
+
+    private const val SERVICE_NOT_FOUND = "해당 타입에 대한 컴포넌트를 찾을 수 없습니다"
 }

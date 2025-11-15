@@ -8,7 +8,6 @@ import java.io.InputStream
 
 object PropertyLoader {
     private const val YML_NAME = "watson.yml"
-    private const val YML_NOT_EXIST = "'$YML_NAME'이 'resources'에 존재하지 않습니다."
 
     private val properties: Map<String, Any>
 
@@ -61,4 +60,6 @@ object PropertyLoader {
     private fun Map<String, Any>.nextPoint(key: String): Any? {
         return this[key]
     }
+
+    private const val YML_NOT_EXIST = "'$YML_NAME'이 'resources'에 존재하지 않습니다."
 }
